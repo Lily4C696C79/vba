@@ -1,0 +1,32 @@
+Sub 出席统计()
+Dim arr(), dic As Object, r As Range
+Dim sht As Worksheet
+Dim k，m
+
+'定义字典
+Set dic = CreateObject("scripting.dictionary") 
+
+’统计所有sheet中人名出现的次数
+For Each sht In Worksheets 
+    If sht.Name <> "出席统计" Then
+        arr = sht.UsedRange.Value
+        For Each k In arr
+            dic(k) = dic(k) + 1
+        Next
+    End If
+Next
+
+'删除出席不到4次的人名
+For Each m In dic.keys()
+    If dic(m) < 4 Then dic.Remove (m)
+Next
+
+
+
+'将字典结果输出至统计表的A列和B列
+Sheets(1).Range("a2:a" & UBound(dic.keys()) + 2) = Application.Transpose(dic.keys())
+Sheets(1).Range("b2:b" & UBound(dic.items()) + 2) = Application.Transpose(dic.items())
+
+
+
+End Sub
