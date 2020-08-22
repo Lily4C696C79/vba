@@ -1,0 +1,26 @@
+Sub 排序保存()
+
+Dim MyBook As Workbook
+Dim sht As Worksheet
+Dim r As Integer
+
+Set MyBook = ActiveWorkbook
+
+For Each sht In MyBook.Sheets
+  r = sht.Cells(Rows.Count, 2).End(3).Row - 1 
+  If sht.Range("g4") = "排名" Then sht.Range("b5:l" & r).Sort key1:=sht.Range("g1"), order1:=1 '按照G列升序排列
+  sht.Range("a1:l" & (r + 1)).CopyPicture  '固定区域截图
+  sht.Range("a1").PasteSpecial  '粘贴至当前工作表
+  
+  '将改工作表并保存至原工作簿的文件夹
+  sht.Copy
+  Application.DisplayAlerts = False '关闭Excel的警告框
+  ActiveWorkbook.SaveAs Filename:=MyBook.Path & "\" & sht.Name & "文件名" & Format(Date, "yyyymmdd") & ".xlsx"
+  ActiveWorkbook.Close
+  Application.DisplayAlerts = True  '打开Excel的警告框
+
+Next
+
+
+
+End Sub
