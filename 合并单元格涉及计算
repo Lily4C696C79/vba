@@ -1,0 +1,11 @@
+Sub 计算()
+Dim i&, j&
+Dim r As Range
+
+For i = 3 To 14
+    Set r = Cells(i, 5).MergeArea
+    Cells(i, 6) = Cells(i, 4) * r.Cells(1, 1).Value
+    
+Next
+
+End Sub
