@@ -1,0 +1,16 @@
+Sub test()
+Dim i&, j&, k&
+
+j = Cells(Rows.Count, 4).End(xlUp).Row '一共多少行
+
+For i = 3 To j
+    If Cells(i, 5).MergeCells Then
+        k = Cells(i, 5).MergeArea.Count '当前合并的单元格有几行
+        Cells(i, 5).UnMerge
+        Range("e" & (i + 1) & ":e" & (i + k - 1)).Value = Cells(i, 5).Value 
+        i = i + k - 1 '跳过已经拆分的行
+    End If
+Next i
+
+
+End Sub
