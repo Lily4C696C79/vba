@@ -1,0 +1,23 @@
+Sub 合并单元格()
+
+Dim i&, j&
+
+j = Cells(Rows.Count, 2).End(xlUp).Row
+
+Application.DisplayAlerts = False '取消警告框
+
+
+'合并单元格需要倒序
+For i = j To 3 Step -1
+
+    If Cells(i, 2) = Cells((i - 1), 2) Then
+        
+        Range(Cells(i, 2), Cells((i - 1), 2)).Merge
+        
+    End If
+    
+Next
+
+Application.DisplayAlerts = True
+
+End Sub
