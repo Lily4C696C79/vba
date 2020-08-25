@@ -1,0 +1,77 @@
+用工单位	派工单位	人数		计件量
+乙公司			B公司			93		7905
+					C公司			29		2204
+					合计			122		10109
+					备注			无	
+丙公司			A公司			81		6642
+					C公司			19		1710
+					合计			100		8352
+					备注			无	
+甲公司			A公司			33		2658
+					B公司			11		753
+					C公司			26		1919
+					合计			70		5330
+					备注		无	
+丁公司			C公司			55	4730
+					合计			55	4730
+					备注		无	
+					
+使用选择排序法对4个公司的总量进行排序
+					
+'自己做，使用for循环				
+Sub 排序1()
+Dim i&, j&, k1&, k2&, n1&, n2&
+
+For i = 2 To 17
+    For j = i + Cells(i, 1).MergeArea.Count To 17
+        k1 = Cells(i, 1).MergeArea.Count   'i公司的合并单元格行数
+        n1 = i + k1 - 2										 'i公司合计所在的行数
+        k2 = Cells(j, 1).MergeArea.Count   'j公司的合并单元格行数
+        n2 = j + k2 - 2									 	 'i公司合计所在的行数
+				
+				'如果i公司的合计小于j公司，则将相关单元格剪切、贴入到i公司上
+        If Cells(n1, 4) < Cells(n2, 4) Then
+            Cells(j, 1).Resize(k2, 4).Cut
+            Cells(i, 1).Insert shift:=xlDown
+        End If
+				
+        j = j + k2 - 1                      '跳过j公司的行数，便于进入下一个公司循环
+    Next j
+		
+    i = i + k1 - 1													'跳过i公司的行数，便于进入下一个公司循环
+Next i
+End Sub
+
+        
+'提供的代码，使用do while…loop语句
+
+
+Sub 排序2()
+    Dim i&, j&, iRows&, jRows&
+        
+    '以下使用选择排序法思想对表格进行排序
+    i = 2
+    Do While i <= 13
+    
+        '让 j 从i的下一个公司（即下一个合并区域的首行）开始循环
+        j = i + Cells(i, 1).MergeArea.Rows.Count
+        Do While j <= 13
+             
+            '获得当前i、j两个公司的合并区域总行数
+            iRows = Cells(i, 1).MergeArea.Rows.Count
+            jRows = Cells(j, 1).MergeArea.Rows.Count
+            
+            '如果j公司最后一行第3列(即合计)大于i公司，则将j剪切到i前面
+            If Cells(j + jRows - 2, 3) > Cells(i + iRows - 2, 3) Then
+                Cells(j, 1).Resize(jRows, 4).Cut
+                Cells(i, 1).Insert shift:=xlDown
+            End If
+            
+            '让j的增加值为当前合并区域的总行数，从而直接跳到下一个公司上
+            j = j + jRows
+        Loop
+        
+         '让i的增加值为当前合并区域的总行数，从而直接跳到下一个公司上
+        i = i + Cells(i, 1).MergeArea.Rows.Count
+    Loop
+		End Sub
