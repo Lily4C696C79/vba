@@ -1,0 +1,68 @@
+利用sheet2中的姓氏顺序对其他sheet的姓名进行排序
+
+
+
+Sub 排序1()
+Dim i&, j&, k&
+Dim r As Range
+Dim w As Worksheet
+
+Set r = Sheets(2).Range("b3:b18") 
+Application.AddCustomList (r)  '将选定的单元格写入Excel自定义序列
+k = Application.CustomListCount   '加入的序列在自定义序列里面的排序
+
+
+For i = 3 To Sheets.Count
+    Set w = Sheets(i)
+    
+        '提取需要排序的姓氏
+        j = 2
+            Do While w.Cells(j, 2) <> ""
+                w.Cells(j, 1) = Left(w.Cells(j, 2), 1)
+                j = j + 1
+            Loop
+        
+        '用A列排序后删除
+         w.Range("a:b").Sort key1:=w.Range("a1"), ordercustom:=k + 1  
+         w.Range("a:a").Clear
+    
+Next
+
+Application.DeleteCustomList k  '排序完成要删除添加的自定义序列
+
+
+End Sub
+
+
+'提供的代码答案
+Sub 排序2()
+
+    Dim w As Worksheet, i As Long
+    
+    '将sheet3中的姓氏规则加入到Excel自定义序列中
+    '注意如果Excel中已有相同的规则，那么本行语句会执行出错，需要先删除该规则。
+    Application.AddCustomList Worksheets("sheet3").Range("b3:b18")
+    
+    For Each w In Worksheets
+    
+        If w.Name <> "Sheet3" Then
+        
+            '因为自定义排序必须“整单元格匹配”，所以先从工作表w中B列姓名里面取出“姓”（单字），并存入第一列以供排序使用。
+            '如果实际工作中第一列或第三列已有数据、不能更改，可以用宏代码先插入一列，排序结束后再删除该列即可。
+            i = 2
+            Do While w.Cells(i, 2) <> ""
+                w.Cells(i, 1) = Left(w.Cells(i, 2), 1)
+                i = i + 1
+            Loop
+    
+            '以第一列“姓”为关键字进行排序，排序后将该列清空以恢复表格原状。
+            w.Range("a:b").Sort key1:=w.Range("a1"), ordercustom:=Application.CustomListCount + 1
+            w.Range("a:a").Clear
+    
+        End If
+    
+    Next w
+
+    Application.DeleteCustomList Application.CustomListCount
+    
+End Sub
