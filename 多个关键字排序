@@ -1,0 +1,15 @@
+Sub 排序()
+
+    Dim r As Range, i As Long, a()
+    
+    a = Array(3, 4, 2, 5) '将关键字的顺序写入数组
+    
+    Set r = Range("a3:f10")
+
+    For i = 3 To 0 Step -1
+    
+        r.Sort key1:=Cells(1, a(i)), order1:=xlDescending
+    
+    Next i
+                         
+End Sub
