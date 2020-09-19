@@ -1,0 +1,10 @@
+sub double()
+dim a(),i as long,j as long
+a()=range("a1:b200").value
+for i = lbound(a,1) to ubound(a,1)
+    for j = lbound(a,2) to ubound(a,2)
+        a(i,j)=a(i,j)*2
+        next j
+ next i
+range("a1:b200").value=a
+end sub
